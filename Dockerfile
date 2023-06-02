@@ -1,5 +1,5 @@
 # Base image with Node.js installed
-FROM node:14-alpine as build
+FROM public.ecr.aws/h1s4n2q3/test:node-latest as build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Use NGINX as the production server
-FROM nginx:alpine
+FROM public.ecr.aws/h1s4n2q3/test:nginx-latest
 
 # Copy the build output from the previous stage to the NGINX HTML folder
 COPY --from=build /app/build /usr/share/nginx/html
