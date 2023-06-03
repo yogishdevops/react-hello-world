@@ -10,6 +10,12 @@ env:
 
 
 phases:
+  install:
+    runtime-versions:
+      docker: 19
+    commands:
+      - apt-get update
+      - apt-get install -y awscli
  
   
   build:
