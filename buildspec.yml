@@ -4,9 +4,9 @@ env:
   variables:
     AWS_REGION: us-east-1
     AWS_ACCOUNT_ID: 029328341406
-    IMAGE_NAME: my-docker-image
+    IMAGE_NAME: react-app
     REPO_NAME: test
-    IMAGE_TAG: react-latest
+    IMAGE_TAG: latest
 
 
 phases:
@@ -15,13 +15,12 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t $IMAGE_NAME .
+      - docker build -t $IMAGE_NAME:$IMAGE_TAG .
       - echo Tagging the Docker image...
-      - docker tag $IMAGE_NAME $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
       - echo login into aws ecr 
-      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h1s4n2q3
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
       - echo Pushing the Docker image to Amazon ECR...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
-
